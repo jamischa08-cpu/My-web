@@ -72,8 +72,8 @@ footer a{color:var(--accent);text-decoration:none;}
           <input type="hidden" name="cart" id="fc"/>
           <input type="hidden" name="total" id="ft"/>
           <div class="fr">
-            <div class="fg"><label>Имя *</label><input type="text" name="name" required placeholder="Иван"/></div>
-            <div class="fg"><label>Телефон *</label><input type="tel" name="phone" required placeholder="+7 (___) ___-__-__"/></div>
+            <div class="fg"><label>Имя *</label><input type="text" name="name" required placeholder="Name"/></div>
+            <div class="fg"><label>Телефон *</label><input type="tel" name="phone" required placeholder="+49 (___) ___-__-__"/></div>
           </div>
           <div class="fg"><label>Адрес доставки *</label><input type="text" name="address" required placeholder="Улица, дом, квартира"/></div>
           <div class="fr">
@@ -95,7 +95,7 @@ footer a{color:var(--accent);text-decoration:none;}
     </div>
   </div>
 </div>
-<footer><p>2024 <a href="index.html">МясоМарт</a></p></footer>
+<footer><p>2026 <a href="index.html">МясоМарт</a></p></footer>
 <script>
 const CK='myasomart_cart';
 const EM={basturma:'&#x1F969;',olenina:'&#x1F98C;',kolbasa:'&#x1F32D;'};
@@ -110,7 +110,7 @@ function render(){
   sr.innerHTML=cart.map(it=>'<div class="sr"><span>'+it.name+' x'+it.qty+'</span><span>'+(it.price*it.qty).toLocaleString('ru')+' \u20bd</span></div>').join('');
   st.textContent=tot.toLocaleString('ru')+' \u20bd';
   document.getElementById('fc').value=cart.map(i=>i.name+' x'+i.qty).join('; ');
-  document.getElementById('ft').value=tot+' руб';
+  document.getElementById('ft').value=tot+' eur';
 }
 function chg(i,d){const c=gc();c[i].qty=Math.max(1,c[i].qty+d);sc(c);}
 function rm(i){const c=gc();c.splice(i,1);sc(c);}
