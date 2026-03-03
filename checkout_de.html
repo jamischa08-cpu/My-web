@@ -107,7 +107,7 @@
             </div>
             <div class="form-group">
               <label>Телефон *</label>
-              <input type="tel" name="phone" required placeholder="+7 (___) ___-__-__" />
+              <input type="tel" name="phone" required placeholder="+49 (___) ___-__-__" />
             </div>
           </div>
           <div class="form-group">
@@ -149,7 +149,7 @@
         <div id="summary-rows"></div>
         <div class="summary-total">
           <span>К оплате:</span>
-          <span id="summary-total-price">0 ₽</span>
+          <span id="summary-total-price">0 </span>
         </div>
         <p class="note">Нажимая кнопку, вы соглашаетесь на обработку персональных данных. Мы свяжемся с вами для подтверждения заказа.</p>
       </div>
@@ -157,7 +157,7 @@
   </div>
 </div>
 
-<footer><p>© 2024 <a href="myasomart.html">МясоМарт</a> — Свежее мясо с доставкой</p></footer>
+<footer><p>© 2026 <a href="myasomart.html">Мясомаркт</a> — Свежее мясо с доставкой</p></footer>
 
 <script>
 const CART_KEY = 'myasomart_cart';
@@ -181,7 +181,7 @@ function renderCart() {
   if (cart.length === 0) {
     container.innerHTML = '<div class="cart-empty">Корзина пуста. <a href="myasomart.html">Перейти в каталог</a></div>';
     summaryRows.innerHTML = '';
-    totalEl.textContent = '0 ₽';
+    totalEl.textContent = '0 ';
     btn.disabled = true;
     return;
   }
@@ -203,7 +203,7 @@ function renderCart() {
         <span class="qty-num">${item.qty}</span>
         <button class="qty-btn" onclick="changeQty(${idx},1)">+</button>
       </div>
-      <div class="cart-item-price">${(subtotal).toLocaleString('ru')} ₽</div>
+      <div class="cart-item-price">${(subtotal).toLocaleString('ru')} </div>
       <button class="remove-btn" onclick="removeItem(${idx})" title="Удалить">✕</button>
     </div>`;
   }).join('');
