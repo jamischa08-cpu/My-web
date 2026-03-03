@@ -211,10 +211,10 @@ function renderCart() {
   summaryRows.innerHTML = cart.map(item =>
     `<div class="summary-row"><span>${item.name} x${item.qty}</span><span>${(item.price * item.qty).toLocaleString('ru')} ₽</span></div>`
   ).join('');
-  totalEl.textContent = total.toLocaleString('ru') + ' ₽';
+  totalEl.textContent = total.toLocaleString('ru') + ' €';
 
   document.getElementById('field-cart').value = cart.map(i => `${i.name} x${i.qty} (${i.unit})`).join('; ');
-  document.getElementById('field-total').value = total + ' руб';
+  document.getElementById('field-total').value = total + ' eur';
 }
 
 function changeQty(idx, delta) {
