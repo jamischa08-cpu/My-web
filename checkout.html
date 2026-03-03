@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Оформление заказа — МясоМарт</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--red:#C0392B;--dark:#1A0A06;--cream:#F5EFE6;--warm:#E8D5B0;--accent:#E74C3C;--gray:#6B5B4E;}
+body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--dark);}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 5%;background:rgba(26,10,6,0.97);}
+.logo{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:var(--cream);text-decoration:none;}.logo span{color:var(--accent);}
+.nb{color:var(--warm);text-decoration:none;font-size:.88rem;}.nb:hover{color:var(--accent);}
+.page{padding:7rem 5% 4rem;max-width:1100px;margin:0 auto;}
+h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);margin-bottom:.5rem;}
+.sub{color:var(--gray);margin-bottom:2.5rem;}
+.grid{display:grid;grid-template-columns:1fr 380px;gap:3rem;align-items:start;}
+.sec h2{font-family:'Playfair Display',serif;font-size:1.35rem;margin-bottom:1.4rem;padding-bottom:.75rem;border-bottom:2px solid rgba(26,10,6,.1);}
+.ci{display:flex;align-items:center;gap:1rem;padding:.9rem 0;border-bottom:1px solid rgba(26,10,6,.07);}
+.ce{font-size:2.4rem;flex-shrink:0;width:55px;text-align:center;}
+.cn{flex:1;}.cname{font-family:'Playfair Display',serif;font-size:.97rem;margin-bottom:.18rem;}.cunit{font-size:.76rem;color:var(--gray);}
+.cq{display:flex;align-items:center;gap:.45rem;}
+.qb{width:28px;height:28px;border:1px solid rgba(26,10,6,.2);background:transparent;cursor:pointer;font-size:1rem;transition:background .2s;}.qb:hover{background:var(--red);color:#fff;border-color:var(--red);}
+.qn{min-width:22px;text-align:center;font-size:.93rem;}
+.cp{font-weight:700;color:var(--red);font-size:1.02rem;min-width:75px;text-align:right;}
+.rm{background:none;border:none;color:var(--gray);cursor:pointer;font-size:1rem;padding:.2rem;}.rm:hover{color:var(--red);}
+.empty{text-align:center;padding:3rem 1rem;color:var(--gray);}.empty a{color:var(--red);text-decoration:none;}
+.box{background:#fff;border:1px solid rgba(26,10,6,.08);padding:1.8rem;position:sticky;top:5.5rem;}
+.box h2{font-family:'Playfair Display',serif;font-size:1.35rem;margin-bottom:1.4rem;padding-bottom:.75rem;border-bottom:2px solid rgba(26,10,6,.1);}
+.sr{display:flex;justify-content:space-between;margin-bottom:.75rem;font-size:.88rem;color:var(--gray);}
+.st{display:flex;justify-content:space-between;font-size:1.15rem;font-weight:700;padding-top:.9rem;border-top:2px solid rgba(26,10,6,.1);margin-top:.9rem;margin-bottom:1.4rem;}
+.fs{margin-top:2rem;}.fs h2{font-family:'Playfair Display',serif;font-size:1.35rem;margin-bottom:1.4rem;padding-bottom:.75rem;border-bottom:2px solid rgba(26,10,6,.1);}
+.fg{margin-bottom:1.1rem;}
+label{display:block;font-size:.78rem;color:var(--gray);margin-bottom:.38rem;letter-spacing:.5px;text-transform:uppercase;}
+input,textarea,select{width:100%;padding:.72rem 1rem;border:1px solid rgba(26,10,6,.15);background:#fff;font-family:'Jost',sans-serif;font-size:.92rem;color:var(--dark);transition:border-color .2s;}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--red);}
+textarea{height:90px;resize:vertical;}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.btn{width:100%;background:var(--red);color:#fff;border:none;padding:1rem;font-family:'Jost',sans-serif;font-size:.97rem;font-weight:500;cursor:pointer;transition:background .2s;}.btn:hover{background:var(--accent);}.btn:disabled{background:var(--gray);cursor:not-allowed;}
+.note{font-size:.74rem;color:var(--gray);text-align:center;margin-top:.75rem;line-height:1.5;}
+.ok{display:none;text-align:center;padding:3rem 1rem;}
+.ok .icon{font-size:5rem;margin-bottom:1rem;}
+.ok h2{font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:1rem;}
+.ok p{color:var(--gray);margin-bottom:2rem;}
+.back{display:inline-block;background:var(--dark);color:#fff;padding:.9rem 2rem;text-decoration:none;font-size:.93rem;}
+footer{background:#0e0604;color:var(--gray);padding:1.6rem 5%;text-align:center;font-size:.78rem;margin-top:4rem;}
+footer a{color:var(--accent);text-decoration:none;}
+@media(max-width:768px){.grid{grid-template-columns:1fr;}.box{position:static;}.fr{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Мясо<span>Март</span></a>
+  <a href="index.html" class="nb">&#8592; В каталог</a>
+</nav>
+<div class="page">
+  <h1>Оформление заказа</h1>
+  <p class="sub">Проверьте корзину и заполните данные для доставки</p>
+  <div id="ok" class="ok">
+    <div class="icon">&#x2705;</div>
+    <h2>Заказ принят!</h2>
+    <p>Мы получили ваш заказ и свяжемся с вами в течение 30 минут.</p>
+    <a href="index.html" class="back">Вернуться в магазин</a>
+  </div>
+  <div id="main" class="grid">
+    <div>
+      <div class="sec"><h2>Ваша корзина</h2><div id="items"><div class="empty">Корзина пуста. <a href="index.html">В каталог</a></div></div></div>
+      <div class="fs">
+        <h2>Данные доставки</h2>
+        <form name="order" method="POST" data-netlify="true" id="form">
+          <input type="hidden" name="form-name" value="order"/>
+          <input type="hidden" name="cart" id="fc"/>
+          <input type="hidden" name="total" id="ft"/>
+          <div class="fr">
+            <div class="fg"><label>Имя *</label><input type="text" name="name" required placeholder="Иван"/></div>
+            <div class="fg"><label>Телефон *</label><input type="tel" name="phone" required placeholder="+7 (___) ___-__-__"/></div>
+          </div>
+          <div class="fg"><label>Адрес доставки *</label><input type="text" name="address" required placeholder="Улица, дом, квартира"/></div>
+          <div class="fr">
+            <div class="fg"><label>Время доставки</label><select name="time"><option>Как можно скорее</option><option>9:00–12:00</option><option>12:00–15:00</option><option>15:00–18:00</option><option>18:00–22:00</option></select></div>
+            <div class="fg"><label>Оплата</label><select name="pay"><option>Наличными при получении</option><option>Картой при получении</option></select></div>
+          </div>
+          <div class="fg"><label>Комментарий</label><textarea name="comment" placeholder="Особые пожелания, как найти вход..."></textarea></div>
+        </form>
+      </div>
+    </div>
+    <div>
+      <div class="box">
+        <h2>Итого</h2>
+        <div id="srows"></div>
+        <div class="st"><span>К оплате:</span><span id="stotal">0 &#8381;</span></div>
+        <button class="btn" id="btn" onclick="submit()" disabled>Оформить заказ</button>
+        <p class="note">Нажимая кнопку, вы соглашаетесь на обработку персональных данных.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<footer><p>2024 <a href="index.html">МясоМарт</a></p></footer>
+<script>
+const CK='myasomart_cart';
+const EM={basturma:'&#x1F969;',olenina:'&#x1F98C;',kolbasa:'&#x1F32D;'};
+function gc(){try{return JSON.parse(localStorage.getItem(CK))||[];}catch{return[];}}
+function sc(c){localStorage.setItem(CK,JSON.stringify(c));render();}
+function render(){
+  const cart=gc(),box=document.getElementById('items'),sr=document.getElementById('srows'),st=document.getElementById('stotal'),btn=document.getElementById('btn');
+  if(!cart.length){box.innerHTML='<div class="empty">Корзина пуста. <a href="index.html">В каталог</a></div>';sr.innerHTML='';st.textContent='0 \u20bd';btn.disabled=true;return;}
+  btn.disabled=false;
+  let tot=0;
+  box.innerHTML=cart.map((it,i)=>{const s=it.price*it.qty;tot+=s;return '<div class="ci"><div class="ce">'+(EM[it.id]||'&#x1F969;')+'</div><div class="cn"><div class="cname">'+it.name+'</div><div class="cunit">'+it.unit+'</div></div><div class="cq"><button class="qb" onclick="chg('+i+',-1)">&#8722;</button><span class="qn">'+it.qty+'</span><button class="qb" onclick="chg('+i+',1)">+</button></div><div class="cp">'+s.toLocaleString('ru')+' \u20bd</div><button class="rm" onclick="rm('+i+')" title="Удалить">&#x2715;</button></div>';}).join('');
+  sr.innerHTML=cart.map(it=>'<div class="sr"><span>'+it.name+' x'+it.qty+'</span><span>'+(it.price*it.qty).toLocaleString('ru')+' \u20bd</span></div>').join('');
+  st.textContent=tot.toLocaleString('ru')+' \u20bd';
+  document.getElementById('fc').value=cart.map(i=>i.name+' x'+i.qty).join('; ');
+  document.getElementById('ft').value=tot+' руб';
+}
+function chg(i,d){const c=gc();c[i].qty=Math.max(1,c[i].qty+d);sc(c);}
+function rm(i){const c=gc();c.splice(i,1);sc(c);}
+function submit(){
+  const f=document.getElementById('form');
+  if(!f.name.value||!f.phone.value||!f.address.value){alert('Заполните обязательные поля: Имя, Телефон, Адрес');return;}
+  if(!gc().length){alert('Корзина пуста');return;}
+  const d=new FormData(f);
+  fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(d).toString()}).catch(()=>{});
+  localStorage.removeItem(CK);
+  document.getElementById('main').style.display='none';
+  document.getElementById('ok').style.display='block';
+  window.scrollTo(0,0);
+}
+render();
+</script>
+</body>
+</html>

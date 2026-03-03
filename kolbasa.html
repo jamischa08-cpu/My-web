@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Колбаса домашняя — МясоМарт</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--red:#C0392B;--dark:#1A0A06;--cream:#F5EFE6;--warm:#E8D5B0;--accent:#E74C3C;--gray:#6B5B4E;--br:#8B4513;}
+    body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--dark);}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 5%;background:rgba(26,10,6,0.97);}
+    .logo{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:var(--cream);text-decoration:none;}.logo span{color:var(--accent);}
+    .nr{display:flex;align-items:center;gap:1rem;}.nr a{color:var(--warm);text-decoration:none;font-size:.88rem;transition:color .2s;}.nr a:hover{color:var(--accent);}
+    .cta{background:var(--red)!important;color:#fff!important;padding:.4rem 1rem;border-radius:2px;font-weight:500;}
+    .lb{background:rgba(232,213,176,.15);color:var(--warm)!important;padding:.35rem .85rem;border-radius:2px;font-size:.75rem;letter-spacing:1px;border:1px solid rgba(232,213,176,.3);}
+    .lb:hover{background:rgba(232,213,176,.35)!important;}
+    .cb{background:var(--accent);color:#fff;font-size:.62rem;font-weight:700;padding:.1rem .38rem;border-radius:10px;margin-left:.25rem;vertical-align:top;display:none;}
+    .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--dark);color:var(--cream);padding:.75rem 1.6rem;font-size:.88rem;border-left:3px solid var(--accent);opacity:0;transition:all .3s;z-index:9999;white-space:nowrap;}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+    .hero{min-height:60vh;background:#1a0e04;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:8rem 5% 5rem;position:relative;overflow:hidden;}
+    .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 60% 50%,rgba(160,80,20,.25) 0%,transparent 65%);}
+    .ht{position:relative;z-index:1;}
+    .bc{font-size:.76rem;color:var(--gray);margin-bottom:1rem;}.bc a{color:var(--gray);text-decoration:none;}.bc a:hover{color:var(--accent);}
+    .bdg{display:inline-block;background:var(--br);color:#fff;font-size:.66rem;letter-spacing:3px;text-transform:uppercase;padding:.28rem .75rem;margin-bottom:.9rem;}
+    .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,5vw,4.2rem);color:var(--cream);line-height:1.1;margin-bottom:.9rem;}
+    .sub{color:var(--warm);font-size:.98rem;line-height:1.7;max-width:400px;margin-bottom:1.6rem;}
+    .pr{font-size:2.3rem;font-weight:700;color:#D4873A;margin-bottom:1.3rem;}.pr span{font-size:.92rem;color:var(--gray);font-weight:400;}
+    .qr{display:flex;align-items:center;gap:.75rem;margin-bottom:1.1rem;}
+    .qb{width:33px;height:33px;border:1px solid rgba(232,213,176,.3);background:transparent;color:var(--warm);font-size:1.1rem;cursor:pointer;transition:background .2s;}.qb:hover{background:var(--br);border-color:var(--br);}
+    .qn{color:var(--cream);font-size:1rem;min-width:26px;text-align:center;}
+    .bb{background:var(--br);color:#fff;border:none;padding:.9rem 1.9rem;font-family:'Jost',sans-serif;font-size:.92rem;font-weight:500;cursor:pointer;margin-right:.75rem;transition:background .2s,transform .15s;}.bb:hover{background:#A0522D;transform:translateY(-2px);}
+    .lc{color:var(--warm);font-size:.83rem;text-decoration:none;}.lc:hover{color:var(--accent);}
+    .hv{display:flex;justify-content:center;align-items:center;font-size:11rem;filter:drop-shadow(0 0 55px rgba(160,80,20,.4));animation:fl 3s ease-in-out infinite;}
+    @keyframes fl{0%,100%{transform:translateY(0);}50%{transform:translateY(-13px);}}
+    .tw{padding:3.5rem 5%;}
+    .tabs{display:flex;border-bottom:2px solid rgba(26,10,6,.1);margin-bottom:2rem;flex-wrap:wrap;}
+    .tab{padding:.72rem 1.5rem;cursor:pointer;font-size:.86rem;border-bottom:3px solid transparent;margin-bottom:-2px;color:var(--gray);transition:color .2s,border-color .2s;}
+    .tab.active{color:var(--br);border-bottom-color:var(--br);font-weight:500;}
+    .tp{display:none;}.tp.active{display:block;}
+    .ig{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;}
+    .it h3{font-family:'Playfair Display',serif;font-size:1.35rem;margin-bottom:.85rem;}
+    .it p{color:var(--gray);line-height:1.8;margin-bottom:.85rem;font-size:.92rem;}
+    .it ul{list-style:none;}.it ul li{color:var(--gray);padding:.42rem 0;border-bottom:1px solid rgba(26,10,6,.06);font-size:.86rem;}.it ul li strong{color:var(--dark);}
+    table{width:100%;border-collapse:collapse;}th{text-align:left;padding:.62rem 1rem;background:#1a0e04;color:var(--warm);font-size:.76rem;text-transform:uppercase;}
+    td{padding:.62rem 1rem;border-bottom:1px solid rgba(26,10,6,.06);font-size:.86rem;color:var(--gray);}td:last-child{font-weight:500;color:var(--dark);}
+    .rel{background:var(--dark);padding:3.5rem 5%;}.rel h2{font-family:'Playfair Display',serif;color:var(--cream);font-size:1.6rem;margin-bottom:1.6rem;}
+    .rg{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1.1rem;}
+    .rc{background:rgba(255,255,255,.04);border:1px solid rgba(232,213,176,.08);padding:1.3rem;text-decoration:none;display:block;transition:background .2s,transform .2s;}.rc:hover{background:rgba(192,57,43,.15);transform:translateY(-4px);}
+    .re{font-size:2.6rem;margin-bottom:.65rem;}.rc h4{color:var(--cream);font-family:'Playfair Display',serif;margin-bottom:.22rem;font-size:.97rem;}.rc p{color:var(--gray);font-size:.76rem;}.rp{color:var(--accent);font-weight:600;margin-top:.4rem;font-size:.88rem;}
+    footer{background:#0e0604;color:var(--gray);padding:1.6rem 5%;text-align:center;font-size:.78rem;}footer a{color:var(--accent);text-decoration:none;}
+    @media(max-width:768px){.hero{grid-template-columns:1fr;}.hv{display:none;}.ig{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Мясо<span>Март</span></a>
+  <div class="nr">
+    <a href="index.html">← Каталог</a>
+    <a href="checkout.html" class="cta">Корзина <span class="cb"></span></a>
+    <a href="kolbasa_de.html" class="lb">DE</a>
+  </div>
+</nav>
+<section class="hero">
+  <div class="ht">
+    <div class="bc"><a href="index.html">Каталог</a> / Колбасы / Колбаса домашняя</div>
+    <div class="bdg">Хит продаж</div>
+    <h1>Колбаса домашняя</h1>
+    <p class="sub">Натуральная оболочка, горячее копчение. Свинина 70%, говядина 30%. Без сои, крахмала и усилителей вкуса.</p>
+    <div class="pr">680 ₽ <span>/ 400г</span></div>
+    <div class="qr">
+      <button class="qb" onclick="cq(-1)">&#8722;</button>
+      <span class="qn" id="qn">1</span>
+      <button class="qb" onclick="cq(1)">+</button>
+    </div>
+    <button class="bb" onclick="doAdd()">+ В корзину</button>
+    <a href="checkout.html" class="lc">&#x1F6D2; Оформить заказ <span class="cb" style="display:none"></span></a>
+  </div>
+  <div class="hv">&#x1F32D;</div>
+</section>
+<div class="tw">
+  <div class="tabs">
+    <div class="tab active" onclick="ot(event,'p1')">Описание</div>
+    <div class="tab" onclick="ot(event,'p2')">Состав</div>
+    <div class="tab" onclick="ot(event,'p3')">Пищевая ценность</div>
+    <div class="tab" onclick="ot(event,'p4')">Хранение</div>
+  </div>
+  <div class="tp active" id="p1">
+    <div class="ig">
+      <div class="it"><h3>О продукте</h3><p>Готовится по старинному рецепту: только свинина и говядина, никаких заменителей. Мясо перемалывается крупно для сочности.</p><p>Коптится горячим методом на дровах из яблони. Натуральная оболочка обеспечивает сочность при разогреве.</p></div>
+      <div class="it"><h3>Характеристики</h3><ul>
+        <li><strong>Состав:</strong> Свинина 70%, говядина 30%</li>
+        <li><strong>Оболочка:</strong> Натуральная свиная</li>
+        <li><strong>Копчение:</strong> Горячее, яблоня</li>
+        <li><strong>Вес:</strong> 400г (2–3 шт.)</li>
+        <li><strong>Сертификат:</strong> ГОСТ Р 52196</li>
+      </ul></div>
+    </div>
+  </div>
+  <div class="tp" id="p2"><div class="it"><h3>Состав</h3><p>Свинина 70%, говядина 30%, соль, чеснок, перец чёрный, мускатный орех, оболочка натуральная. Без сои, крахмала, красителей и Е-250.</p></div></div>
+  <div class="tp" id="p3">
+    <h3 style="font-family:'Playfair Display',serif;font-size:1.35rem;margin-bottom:1.2rem;">На 100г продукта</h3>
+    <table>
+      <tr><th>Показатель</th><th>Значение</th></tr>
+      <tr><td>Энергетическая ценность</td><td>320 ккал</td></tr>
+      <tr><td>Белки</td><td>18 г</td></tr>
+      <tr><td>Жиры</td><td>27 г</td></tr>
+      <tr><td>Углеводы</td><td>0,5 г</td></tr>
+      <tr><td>Соль</td><td>2,1 г</td></tr>
+    </table>
+  </div>
+  <div class="tp" id="p4"><div class="it"><h3>Условия хранения</h3><ul>
+    <li><strong>Температура:</strong> 0°C — +6°C</li>
+    <li><strong>Срок (вакуум):</strong> до 21 дня</li>
+    <li><strong>После вскрытия:</strong> 5 дней</li>
+    <li><strong>Заморозка:</strong> до 3 мес. при -18°C</li>
+  </ul></div></div>
+</div>
+<section class="rel"><h2>Другие продукты</h2>
+  <div class="rg">
+    <a href="basturma.html" class="rc"><div class="re">&#x1F969;</div><h4>Бастурма</h4><p>Вяленая говядина в специях</p><div class="rp">1 200 ₽ / 250г</div></a>
+    <a href="olenina.html" class="rc"><div class="re">&#x1F98C;</div><h4>Оленина</h4><p>Мясо оленя из Якутии</p><div class="rp">1 850 ₽ / кг</div></a>
+  </div>
+</section>
+<footer><p>2024 <a href="index.html">МясоМарт</a></p></footer>
+<script>
+const CK='myasomart_cart';
+function gc(){try{return JSON.parse(localStorage.getItem(CK))||[];}catch{return[];}}
+function sc(c){localStorage.setItem(CK,JSON.stringify(c));ub();}
+function ub(){const n=gc().reduce((s,i)=>s+i.qty,0);document.querySelectorAll('.cb').forEach(el=>{el.textContent=n||'';el.style.display=n?'inline':'none';});}
+function showToast(m){let t=document.getElementById('_t');if(!t){t=document.createElement('div');t.id='_t';t.className='toast';document.body.appendChild(t);}t.textContent=m;t.classList.add('show');clearTimeout(t._x);t._x=setTimeout(()=>t.classList.remove('show'),2500);}
+let q=1;
+function cq(d){q=Math.max(1,q+d);document.getElementById('qn').textContent=q;}
+function doAdd(){const c=gc();const ex=c.find(i=>i.id==='kolbasa');if(ex){ex.qty+=q;}else{c.push({id:'kolbasa',name:'Колбаса домашняя',name_de:'Hausgemachte Wurst',price:680,unit:'400г',unit_de:'400g',qty:q});}sc(c);showToast('Колбаса — добавлено в корзину');q=1;document.getElementById('qn').textContent=1;}
+function ot(e,id){document.querySelectorAll('.tab,.tp').forEach(el=>el.classList.remove('active'));document.getElementById(id).classList.add('active');e.target.classList.add('active');}
+document.addEventListener('DOMContentLoaded',ub);
+</script>
+</body>
+</html>

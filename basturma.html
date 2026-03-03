@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Бастурма — МясоМарт</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--red:#C0392B;--dark:#1A0A06;--cream:#F5EFE6;--warm:#E8D5B0;--accent:#E74C3C;--gray:#6B5B4E;}
+    body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--dark);}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 5%;background:rgba(26,10,6,0.97);}
+    .logo{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:var(--cream);text-decoration:none;}
+    .logo span{color:var(--accent);}
+    .nav-right{display:flex;align-items:center;gap:1rem;}
+    .nav-back{color:var(--warm);text-decoration:none;font-size:.9rem;}
+    .nav-back:hover{color:var(--accent);}
+    .nav-cta{background:var(--red);color:#fff;padding:.45rem 1rem;border-radius:2px;font-size:.85rem;font-weight:500;text-decoration:none;}
+    .lang-btn{background:rgba(232,213,176,.15);color:var(--warm);padding:.35rem .9rem;border-radius:2px;font-size:.78rem;letter-spacing:1px;border:1px solid rgba(232,213,176,.3);text-decoration:none;}
+    .lang-btn:hover{background:rgba(232,213,176,.35);color:#fff;}
+    .cart-badge{background:var(--accent);color:#fff;font-size:.65rem;font-weight:700;padding:.1rem .4rem;border-radius:10px;margin-left:.3rem;vertical-align:top;display:none;}
+    .cart-toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--dark);color:var(--cream);padding:.8rem 1.8rem;font-size:.9rem;border-left:3px solid var(--accent);opacity:0;transition:all .3s;z-index:9999;white-space:nowrap;}
+    .cart-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+    .hero{min-height:60vh;background:var(--dark);display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:8rem 5% 5rem;position:relative;overflow:hidden;}
+    .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 60% 50%,rgba(192,57,43,.2) 0%,transparent 65%);}
+    .hero-text{position:relative;z-index:1;}
+    .breadcrumb{font-size:.78rem;color:var(--gray);margin-bottom:1rem;}
+    .breadcrumb a{color:var(--gray);text-decoration:none;}
+    .breadcrumb a:hover{color:var(--accent);}
+    .badge-tag{display:inline-block;background:var(--red);color:#fff;font-size:.68rem;letter-spacing:3px;text-transform:uppercase;padding:.3rem .8rem;margin-bottom:1rem;}
+    .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,5vw,4.5rem);color:var(--cream);line-height:1.1;margin-bottom:1rem;}
+    .hero-sub{color:var(--warm);font-size:1rem;line-height:1.7;max-width:400px;margin-bottom:1.8rem;}
+    .prod-price{font-size:2.4rem;font-weight:700;color:var(--accent);margin-bottom:1.4rem;}
+    .prod-price span{font-size:.95rem;color:var(--gray);font-weight:400;}
+    .qty-row{display:flex;align-items:center;gap:.8rem;margin-bottom:1.2rem;}
+    .qty-btn{width:34px;height:34px;border:1px solid rgba(232,213,176,.3);background:transparent;color:var(--warm);font-size:1.1rem;cursor:pointer;transition:background .2s;}
+    .qty-btn:hover{background:var(--red);border-color:var(--red);}
+    .qty-num{color:var(--cream);font-size:1rem;min-width:28px;text-align:center;}
+    .btn-buy{background:var(--red);color:#fff;border:none;padding:.95rem 2rem;font-family:'Jost',sans-serif;font-size:.95rem;font-weight:500;cursor:pointer;margin-right:.8rem;transition:background .2s,transform .15s;}
+    .btn-buy:hover{background:var(--accent);transform:translateY(-2px);}
+    .link-checkout{color:var(--warm);font-size:.85rem;text-decoration:none;}
+    .link-checkout:hover{color:var(--accent);}
+    .hero-visual{display:flex;justify-content:center;align-items:center;font-size:11rem;filter:drop-shadow(0 0 60px rgba(192,57,43,.35));animation:float 3s ease-in-out infinite;}
+    @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+    .tabs-section{padding:3.5rem 5%;}
+    .tabs{display:flex;border-bottom:2px solid rgba(26,10,6,.1);margin-bottom:2rem;}
+    .tab{padding:.75rem 1.6rem;cursor:pointer;font-size:.88rem;border-bottom:3px solid transparent;margin-bottom:-2px;color:var(--gray);transition:color .2s,border-color .2s;}
+    .tab.active{color:var(--red);border-bottom-color:var(--red);font-weight:500;}
+    .tab-content{display:none;}
+    .tab-content.active{display:block;}
+    .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;}
+    .info-text h3{font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:.9rem;}
+    .info-text p{color:var(--gray);line-height:1.8;margin-bottom:.9rem;}
+    .info-text ul{list-style:none;}
+    .info-text ul li{color:var(--gray);padding:.45rem 0;border-bottom:1px solid rgba(26,10,6,.06);font-size:.88rem;}
+    .info-text ul li strong{color:var(--dark);}
+    table{width:100%;border-collapse:collapse;}
+    th{text-align:left;padding:.65rem 1rem;background:var(--dark);color:var(--warm);font-size:.78rem;text-transform:uppercase;}
+    td{padding:.65rem 1rem;border-bottom:1px solid rgba(26,10,6,.06);font-size:.88rem;color:var(--gray);}
+    td:last-child{font-weight:500;color:var(--dark);}
+    .related{background:var(--dark);padding:3.5rem 5%;}
+    .related h2{font-family:'Playfair Display',serif;color:var(--cream);font-size:1.7rem;margin-bottom:1.8rem;}
+    .rel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem;}
+    .rel-card{background:rgba(255,255,255,.04);border:1px solid rgba(232,213,176,.08);padding:1.4rem;text-decoration:none;display:block;transition:background .2s,transform .2s;}
+    .rel-card:hover{background:rgba(192,57,43,.15);transform:translateY(-4px);}
+    .rel-emoji{font-size:2.8rem;margin-bottom:.7rem;}
+    .rel-card h4{color:var(--cream);font-family:'Playfair Display',serif;margin-bottom:.25rem;}
+    .rel-card p{color:var(--gray);font-size:.78rem;}
+    .rel-price{color:var(--accent);font-weight:600;margin-top:.45rem;}
+    footer{background:#0e0604;color:var(--gray);padding:1.8rem 5%;text-align:center;font-size:.8rem;}
+    footer a{color:var(--accent);text-decoration:none;}
+    @media(max-width:768px){.hero{grid-template-columns:1fr;}.hero-visual{display:none;}.info-grid{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Мясо<span>Март</span></a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-back">← Каталог</a>
+    <a href="checkout.html" class="nav-cta">Корзина <span class="cart-badge"></span></a>
+    <a href="basturma_de.html" class="lang-btn">DE</a>
+  </div>
+</nav>
+<section class="hero">
+  <div class="hero-text">
+    <div class="breadcrumb"><a href="index.html">Каталог</a> / Деликатесы / Бастурма</div>
+    <div class="badge-tag">Деликатес</div>
+    <h1>Бастурма</h1>
+    <p class="hero-sub">Вяленая говядина в пряной корке из чамана, чеснока и красного перца. Выдержка 21 день по армянскому рецепту.</p>
+    <div class="prod-price">1 200 ₽ <span>/ 250г</span></div>
+    <div class="qty-row">
+      <button class="qty-btn" onclick="changeQty(-1)">&#8722;</button>
+      <span class="qty-num" id="qty">1</span>
+      <button class="qty-btn" onclick="changeQty(1)">+</button>
+    </div>
+    <button class="btn-buy" onclick="doAdd()">+ В корзину</button>
+    <a href="checkout.html" class="link-checkout">&#x1F6D2; Оформить заказ <span class="cart-badge" style="display:none"></span></a>
+  </div>
+  <div class="hero-visual">&#x1F969;</div>
+</section>
+<div class="tabs-section">
+  <div class="tabs">
+    <div class="tab active" onclick="openTab(event,'t1')">Описание</div>
+    <div class="tab" onclick="openTab(event,'t2')">Состав</div>
+    <div class="tab" onclick="openTab(event,'t3')">Пищевая ценность</div>
+    <div class="tab" onclick="openTab(event,'t4')">Хранение</div>
+  </div>
+  <div class="tab-content active" id="t1">
+    <div class="info-grid">
+      <div class="info-text">
+        <h3>О продукте</h3>
+        <p>Бастурма — классический деликатес Армении. Готовится из отборной говяжьей вырезки, которую просаливают и покрывают смесью специй: чаманом, чесноком, красным перцем и паприкой.</p>
+        <p>Мясо вялится 21 день. Идеально к вину, для нарезки или бутербродов.</p>
+      </div>
+      <div class="info-text">
+        <h3>Характеристики</h3>
+        <ul>
+          <li><strong>Тип мяса:</strong> Говяжья вырезка</li>
+          <li><strong>Выдержка:</strong> 21 день</li>
+          <li><strong>Вес:</strong> 250г</li>
+          <li><strong>Упаковка:</strong> Вакуумная</li>
+          <li><strong>Сертификат:</strong> ГОСТ Р 55455</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="tab-content" id="t2">
+    <div class="info-text"><h3>Состав</h3><p>Говядина 100%, соль, чаман, чеснок сушёный, паприка, перец красный, перец чёрный. Без красителей, консервантов, ГМО.</p></div>
+  </div>
+  <div class="tab-content" id="t3">
+    <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:1.3rem;">На 100г продукта</h3>
+    <table>
+      <tr><th>Показатель</th><th>Значение</th></tr>
+      <tr><td>Энергетическая ценность</td><td>240 ккал</td></tr>
+      <tr><td>Белки</td><td>36 г</td></tr>
+      <tr><td>Жиры</td><td>10 г</td></tr>
+      <tr><td>Углеводы</td><td>0 г</td></tr>
+      <tr><td>Соль</td><td>4,5 г</td></tr>
+    </table>
+  </div>
+  <div class="tab-content" id="t4">
+    <div class="info-text"><h3>Условия хранения</h3><ul>
+      <li><strong>Температура:</strong> 0°C до +6°C</li>
+      <li><strong>Срок (вакуум):</strong> до 60 дней</li>
+      <li><strong>После вскрытия:</strong> 7 дней</li>
+      <li><strong>Заморозка:</strong> до 6 мес. при -18°C</li>
+    </ul></div>
+  </div>
+</div>
+<section class="related">
+  <h2>Другие продукты</h2>
+  <div class="rel-grid">
+    <a href="olenina.html" class="rel-card"><div class="rel-emoji">&#x1F98C;</div><h4>Оленина</h4><p>Мясо оленя из Якутии</p><div class="rel-price">1 850 ₽ / кг</div></a>
+    <a href="kolbasa.html" class="rel-card"><div class="rel-emoji">&#x1F32D;</div><h4>Колбаса домашняя</h4><p>Горячее копчение</p><div class="rel-price">680 ₽ / 400г</div></a>
+  </div>
+</section>
+<footer><p>2024 <a href="index.html">МясоМарт</a></p></footer>
+<script>
+const CK='myasomart_cart';
+function gc(){try{return JSON.parse(localStorage.getItem(CK))||[];}catch{return[];}}
+function sc(c){localStorage.setItem(CK,JSON.stringify(c));ub();}
+function ub(){const n=gc().reduce((s,i)=>s+i.qty,0);document.querySelectorAll('.cart-badge').forEach(el=>{el.textContent=n||'';el.style.display=n?'inline':'none';});}
+function toast(n){let t=document.getElementById('ct');if(!t){t=document.createElement('div');t.id='ct';t.className='cart-toast';document.body.appendChild(t);}t.textContent=n+' — добавлено';t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2500);}
+let qty=1;
+function changeQty(d){qty=Math.max(1,qty+d);document.getElementById('qty').textContent=qty;}
+function doAdd(){const c=gc();const ex=c.find(i=>i.id==='basturma');if(ex){ex.qty+=qty;}else{c.push({id:'basturma',name:'Бастурма',name_de:'Basturma',price:1200,unit:'250г',unit_de:'250g',qty:qty});}sc(c);toast('Бастурма');qty=1;document.getElementById('qty').textContent=1;}
+function openTab(e,id){document.querySelectorAll('.tab,.tab-content').forEach(el=>el.classList.remove('active'));document.getElementById(id).classList.add('active');e.target.classList.add('active');}
+document.addEventListener('DOMContentLoaded',ub);
+</script>
+</body>
+</html>
