@@ -1,1 +1,265 @@
-test
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Оформление заказа — МясоМарт</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    :root { --red:#C0392B; --dark:#1A0A06; --cream:#F5EFE6; --warm:#E8D5B0; --accent:#E74C3C; --gray:#6B5B4E; }
+    body { font-family:'Jost',sans-serif; background:var(--cream); color:var(--dark); min-height:100vh; }
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.2rem 5%; background:rgba(26,10,6,0.97); }
+    .logo { font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:900; color:var(--cream); text-decoration:none; }
+    .logo span { color:var(--accent); }
+    .nav-back { color:var(--warm); text-decoration:none; font-size:.9rem; }
+    .nav-back:hover { color:var(--accent); }
+    .cart-badge { background:var(--accent); color:#fff; font-size:.65rem; font-weight:700; padding:.1rem .4rem; border-radius:10px; margin-left:.3rem; vertical-align:top; display:none; }
+    .page { padding: 7rem 5% 4rem; max-width:1100px; margin:0 auto; }
+    h1 { font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,3rem); margin-bottom:.5rem; }
+    .subtitle { color:var(--gray); margin-bottom:3rem; }
+    .checkout-grid { display:grid; grid-template-columns:1fr 400px; gap:3rem; align-items:start; }
+    .cart-section h2 { font-family:'Playfair Display',serif; font-size:1.4rem; margin-bottom:1.5rem; padding-bottom:.8rem; border-bottom:2px solid rgba(26,10,6,.1); }
+    .cart-item { display:flex; align-items:center; gap:1rem; padding:1rem 0; border-bottom:1px solid rgba(26,10,6,.07); }
+    .cart-item-emoji { font-size:2.5rem; flex-shrink:0; width:60px; text-align:center; }
+    .cart-item-info { flex:1; }
+    .cart-item-name { font-family:'Playfair Display',serif; font-size:1rem; margin-bottom:.2rem; }
+    .cart-item-unit { font-size:.8rem; color:var(--gray); }
+    .cart-item-qty { display:flex; align-items:center; gap:.5rem; }
+    .qty-btn { width:28px; height:28px; border:1px solid rgba(26,10,6,.2); background:transparent; cursor:pointer; font-size:1rem; transition:background .2s; }
+    .qty-btn:hover { background:var(--red); color:#fff; border-color:var(--red); }
+    .qty-num { min-width:24px; text-align:center; font-size:.95rem; }
+    .cart-item-price { font-weight:700; color:var(--red); font-size:1.05rem; min-width:80px; text-align:right; }
+    .remove-btn { background:none; border:none; color:var(--gray); cursor:pointer; font-size:1.1rem; padding:.2rem; }
+    .remove-btn:hover { color:var(--red); }
+    .cart-empty { text-align:center; padding:3rem 1rem; color:var(--gray); }
+    .cart-empty a { color:var(--red); text-decoration:none; }
+    .summary-box { background:#fff; border:1px solid rgba(26,10,6,.08); padding:2rem; position:sticky; top:6rem; }
+    .summary-box h2 { font-family:'Playfair Display',serif; font-size:1.4rem; margin-bottom:1.5rem; padding-bottom:.8rem; border-bottom:2px solid rgba(26,10,6,.1); }
+    .summary-row { display:flex; justify-content:space-between; margin-bottom:.8rem; font-size:.9rem; color:var(--gray); }
+    .summary-total { display:flex; justify-content:space-between; font-size:1.2rem; font-weight:700; color:var(--dark); padding-top:1rem; border-top:2px solid rgba(26,10,6,.1); margin-top:1rem; margin-bottom:1.5rem; }
+    .form-section { margin-top:2rem; }
+    .form-section h2 { font-family:'Playfair Display',serif; font-size:1.4rem; margin-bottom:1.5rem; padding-bottom:.8rem; border-bottom:2px solid rgba(26,10,6,.1); }
+    .form-group { margin-bottom:1.2rem; }
+    label { display:block; font-size:.82rem; color:var(--gray); margin-bottom:.4rem; letter-spacing:.5px; text-transform:uppercase; }
+    input, textarea, select { width:100%; padding:.75rem 1rem; border:1px solid rgba(26,10,6,.15); background:#fff; font-family:'Jost',sans-serif; font-size:.95rem; color:var(--dark); transition:border-color .2s; }
+    input:focus, textarea:focus, select:focus { outline:none; border-color:var(--red); }
+    textarea { height:100px; resize:vertical; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .btn-order { width:100%; background:var(--red); color:#fff; border:none; padding:1.1rem; font-family:'Jost',sans-serif; font-size:1rem; font-weight:500; cursor:pointer; letter-spacing:.5px; transition:background .2s; }
+    .btn-order:hover { background:var(--accent); }
+    .btn-order:disabled { background:var(--gray); cursor:not-allowed; }
+    .note { font-size:.78rem; color:var(--gray); text-align:center; margin-top:.8rem; line-height:1.5; }
+    .success-screen { display:none; text-align:center; padding:3rem 1rem; }
+    .success-screen .icon { font-size:5rem; margin-bottom:1rem; }
+    .success-screen h2 { font-family:'Playfair Display',serif; font-size:2rem; margin-bottom:1rem; }
+    .success-screen p { color:var(--gray); margin-bottom:2rem; }
+    .btn-back { display:inline-block; background:var(--dark); color:#fff; padding:.9rem 2rem; text-decoration:none; font-size:.95rem; }
+    footer { background:#0e0604; color:var(--gray); padding:2rem 5%; text-align:center; font-size:.82rem; margin-top:4rem; }
+    footer a { color:var(--accent); text-decoration:none; }
+    @media(max-width:768px) { .checkout-grid{grid-template-columns:1fr;} .summary-box{position:static;} .form-row{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="myasomart.html" class="logo">Мясо<span>Март</span></a>
+  <a href="myasomart.html" class="nav-back">← В каталог</a>
+</nav>
+
+<div class="page">
+  <h1>Оформление заказа</h1>
+  <p class="subtitle">Проверьте состав корзины и заполните данные для доставки</p>
+
+  <div id="success-screen" class="success-screen">
+    <div class="icon">✅</div>
+    <h2>Заказ принят!</h2>
+    <p>Мы получили ваш заказ и скоро свяжемся с вами для подтверждения.<br/>Ожидайте звонка в течение 30 минут.</p>
+    <a href="myasomart.html" class="btn-back">Вернуться в магазин</a>
+  </div>
+
+  <div id="checkout-content" class="checkout-grid">
+    <div>
+      <div class="cart-section">
+        <h2>Ваша корзина</h2>
+        <div id="cart-items">
+          <div class="cart-empty">Корзина пуста. <a href="myasomart.html">Перейти в каталог</a></div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2>Данные доставки</h2>
+        <form name="order"
+              method="POST"
+              action="/"
+              data-netlify="true"
+              netlify-honeypot="bot-field"
+              id="order-form">
+          <input type="hidden" name="form-name" value="order" />
+          <input type="hidden" name="bot-field" style="display:none" />
+          <input type="hidden" name="cart_items" id="field-cart" />
+          <input type="hidden" name="total_price" id="field-total" />
+          <button type="submit" style="display:none;"></button>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Имя *</label>
+              <input type="text" name="name" required placeholder="Иван" />
+            </div>
+            <div class="form-group">
+              <label>Телефон *</label>
+              <input type="tel" name="phone" required placeholder="+7 (___) ___-__-__" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Адрес доставки *</label>
+            <input type="text" name="address" required placeholder="Улица, дом, квартира" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Удобное время доставки</label>
+              <select name="delivery_time">
+                <option>Как можно скорее</option>
+                <option>9:00 — 12:00</option>
+                <option>12:00 — 15:00</option>
+                <option>15:00 — 18:00</option>
+                <option>18:00 — 22:00</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Способ оплаты</label>
+              <select name="payment">
+                <option>Наличными при получении</option>
+                <option>Картой при получении</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Комментарий к заказу</label>
+            <textarea name="comment" placeholder="Особые пожелания, как найти вход и т.д."></textarea>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div>
+      <div class="summary-box">
+        <h2>Итого</h2>
+        <div id="summary-rows"></div>
+        <div class="summary-total">
+          <span>К оплате:</span>
+          <span id="summary-total-price">0 ₽</span>
+        </div>
+        <button class="btn-order" id="btn-order" onclick="submitOrder()">Оформить заказ</button>
+        <p class="note">Нажимая кнопку, вы соглашаетесь на обработку персональных данных. Мы свяжемся с вами для подтверждения заказа.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer><p>© 2024 <a href="myasomart.html">МясоМарт</a> — Свежее мясо с доставкой</p></footer>
+
+<script>
+const CART_KEY = 'myasomart_cart';
+const EMOJIS = { basturma:'🥩', olenina:'🦌', kolbasa:'🌭' };
+
+function getCart() {
+  try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch { return []; }
+}
+function saveCart(cart) {
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  renderCart();
+}
+
+function renderCart() {
+  const cart = getCart();
+  const container = document.getElementById('cart-items');
+  const summaryRows = document.getElementById('summary-rows');
+  const totalEl = document.getElementById('summary-total-price');
+  const btn = document.getElementById('btn-order');
+
+  if (cart.length === 0) {
+    container.innerHTML = '<div class="cart-empty">Корзина пуста. <a href="myasomart.html">Перейти в каталог</a></div>';
+    summaryRows.innerHTML = '';
+    totalEl.textContent = '0 ₽';
+    btn.disabled = true;
+    return;
+  }
+
+  btn.disabled = false;
+  let total = 0;
+  container.innerHTML = cart.map((item, idx) => {
+    const subtotal = item.price * item.qty;
+    total += subtotal;
+    const emoji = EMOJIS[item.id] || '🥩';
+    return `<div class="cart-item">
+      <div class="cart-item-emoji">${emoji}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-unit">${item.unit}</div>
+      </div>
+      <div class="cart-item-qty">
+        <button class="qty-btn" onclick="changeQty(${idx},-1)">−</button>
+        <span class="qty-num">${item.qty}</span>
+        <button class="qty-btn" onclick="changeQty(${idx},1)">+</button>
+      </div>
+      <div class="cart-item-price">${(subtotal).toLocaleString('ru')} ₽</div>
+      <button class="remove-btn" onclick="removeItem(${idx})" title="Удалить">✕</button>
+    </div>`;
+  }).join('');
+
+  summaryRows.innerHTML = cart.map(item =>
+    `<div class="summary-row"><span>${item.name} x${item.qty}</span><span>${(item.price * item.qty).toLocaleString('ru')} ₽</span></div>`
+  ).join('');
+  totalEl.textContent = total.toLocaleString('ru') + ' ₽';
+
+  document.getElementById('field-cart').value = cart.map(i => `${i.name} x${i.qty} (${i.unit})`).join('; ');
+  document.getElementById('field-total').value = total + ' руб';
+}
+
+function changeQty(idx, delta) {
+  const cart = getCart();
+  cart[idx].qty = Math.max(1, cart[idx].qty + delta);
+  saveCart(cart);
+}
+function removeItem(idx) {
+  const cart = getCart();
+  cart.splice(idx, 1);
+  saveCart(cart);
+}
+
+function submitOrder() {
+  const form = document.getElementById('order-form');
+  const name = form.querySelector('[name=name]').value.trim();
+  const phone = form.querySelector('[name=phone]').value.trim();
+  const address = form.querySelector('[name=address]').value.trim();
+  if (!name || !phone || !address) {
+    alert('Пожалуйста, заполните обязательные поля: Имя, Телефон, Адрес');
+    return;
+  }
+  const cart = getCart();
+  if (cart.length === 0) {
+    alert('Корзина пуста!');
+    return;
+  }
+
+  const data = new FormData(form);
+  fetch('/', { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body: new URLSearchParams(data).toString() })
+    .then(() => {
+      localStorage.removeItem(CART_KEY);
+      document.getElementById('checkout-content').style.display = 'none';
+      document.getElementById('success-screen').style.display = 'block';
+      window.scrollTo(0,0);
+    })
+    .catch(() => {
+      localStorage.removeItem(CART_KEY);
+      document.getElementById('checkout-content').style.display = 'none';
+      document.getElementById('success-screen').style.display = 'block';
+      window.scrollTo(0,0);
+    });
+}
+
+renderCart();
+</script>
+</body>
+</html>
