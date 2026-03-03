@@ -137,6 +137,8 @@
             <label>Комментарий к заказу</label>
             <textarea name="comment" placeholder="Особые пожелания, как найти вход и т.д."></textarea>
           </div>
+
+          <button class="btn-order" id="btn-order" type="submit">Оформить заказ</button>
         </form>
       </div>
     </div>
@@ -149,7 +151,6 @@
           <span>К оплате:</span>
           <span id="summary-total-price">0 ₽</span>
         </div>
-        <button class="btn-order" id="btn-order" onclick="submitOrder()">Оформить заказ</button>
         <p class="note">Нажимая кнопку, вы соглашаетесь на обработку персональных данных. Мы свяжемся с вами для подтверждения заказа.</p>
       </div>
     </div>
@@ -225,37 +226,6 @@ function removeItem(idx) {
   const cart = getCart();
   cart.splice(idx, 1);
   saveCart(cart);
-}
-
-function submitOrder() {
-  const form = document.getElementById('order-form');
-  const name = form.querySelector('[name=name]').value.trim();
-  const phone = form.querySelector('[name=phone]').value.trim();
-  const address = form.querySelector('[name=address]').value.trim();
-  if (!name || !phone || !address) {
-    alert('Пожалуйста, заполните обязательные поля: Имя, Телефон, Адрес');
-    return;
-  }
-  const cart = getCart();
-  if (cart.length === 0) {
-    alert('Корзина пуста!');
-    return;
-  }
-
-  const data = new FormData(form);
-  fetch('/', { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body: new URLSearchParams(data).toString() })
-    .then(() => {
-      localStorage.removeItem(CART_KEY);
-      document.getElementById('checkout-content').style.display = 'none';
-      document.getElementById('success-screen').style.display = 'block';
-      window.scrollTo(0,0);
-    })
-    .catch(() => {
-      localStorage.removeItem(CART_KEY);
-      document.getElementById('checkout-content').style.display = 'none';
-      document.getElementById('success-screen').style.display = 'block';
-      window.scrollTo(0,0);
-    });
 }
 
 renderCart();
